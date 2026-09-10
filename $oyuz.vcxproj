@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</ProjectGuid>
+    <RootNamespace>oyuz</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>$oyuz</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Configuration)\$(Platform)\</IntDir>
+    <TargetName>payload</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;OYUZ_EXPORTS;_WIN32_IE=0x0600;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;Psapi.lib;dwmapi.lib;ComCtl32.lib;winmm.lib;winhttp.lib;wininet.lib;advapi32.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/SAFESEH:NO %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="core\dllmain.cpp" />
+    <ClCompile Include="core\Globals.cpp" />
+    <ClCompile Include="core\Config.cpp" />
+    <ClCompile Include="core\TrampolineHook.cpp" />
+    <ClCompile Include="core\license.cpp" />
+    <ClCompile Include="hooks\Hooks.cpp" />
+    <ClCompile Include="hooks\OpenAL.cpp" />
+    <ClCompile Include="hooks\OpenGLHooks.cpp" />
+    <ClCompile Include="modules\Aimbot.cpp" />
+    <ClCompile Include="modules\ESP.cpp" />
+    <ClCompile Include="modules\Viewmodel.cpp" />
+    <ClCompile Include="modules\AspectRatio.cpp" />
+    <ClCompile Include="modules\ChamsHand.cpp" />
+    <ClCompile Include="modules\PlayerChams.cpp" />
+    <ClCompile Include="modules\WallCheck.cpp" />
+    <ClCompile Include="modules\ChinaHat.cpp" />
+    <ClCompile Include="modules\TracersNew.cpp" />
+    <ClCompile Include="modules\NoFall.cpp" />
+    <ClCompile Include="gui\GUI.cpp" />
+    <ClCompile Include="help\hde64.c" />
+    <ClCompile Include="help\buffer.c" />
+    <ClCompile Include="imgui\imgui.cpp" />
+    <ClCompile Include="imgui\imgui_draw.cpp" />
+    <ClCompile Include="imgui\imgui_tables.cpp" />
+    <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="imgui\backends\imgui_impl_opengl2.cpp" />
+    <ClCompile Include="imgui\backends\imgui_impl_win32.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="core\Globals.h" />
+    <ClInclude Include="core\Config.h" />
+    <ClInclude Include="core\TrampolineHook.h" />
+    <ClInclude Include="core\license.h" />
+    <ClInclude Include="hooks\Hooks.h" />
+    <ClInclude Include="hooks\OpenAL.h" />
+    <ClInclude Include="hooks\OpenGLHooks.h" />
+    <ClInclude Include="modules\Aimbot.h" />
+    <ClInclude Include="modules\ESP.h" />
+    <ClInclude Include="modules\Viewmodel.h" />
+    <ClInclude Include="modules\AspectRatio.h" />
+    <ClInclude Include="modules\ChamsHand.h" />
+    <ClInclude Include="modules\PlayerChams.h" />
+    <ClInclude Include="modules\WallCheck.h" />
+    <ClInclude Include="modules\ChinaHat.h" />
+    <ClInclude Include="modules\TracersNew.h" />
+    <ClInclude Include="modules\NoFall.h" />
+    <ClInclude Include="gui\GUI.h" />
+    <ClInclude Include="utils\Timer.h" />
+    <ClInclude Include="help\buffer.h" />
+    <ClInclude Include="help\hde64.h" />
+    <ClInclude Include="help\pstdint.h" />
+    <ClInclude Include="help\table64.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

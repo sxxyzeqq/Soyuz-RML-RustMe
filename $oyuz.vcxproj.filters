@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="core">
+      <UniqueIdentifier>{d87a2242-473e-4f78-a3c4-4f83152bd240}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks">
+      <UniqueIdentifier>{dd8b3933-e2df-4dbb-bc2f-24a358eeb6d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules">
+      <UniqueIdentifier>{a31408af-6187-49c3-b881-3ebff7bdbb12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui">
+      <UniqueIdentifier>{bc8b7ac9-1a8f-4821-9fb5-9b9b3da6a00d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{f786cc8a-8db6-458f-b499-f474988ae38b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="help">
+      <UniqueIdentifier>{d371fc5f-0c3f-4f41-b2a8-56f5259396a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{92cc1475-f316-4454-8d7f-7d107c2f0421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\backends">
+      <UniqueIdentifier>{d05f1e76-02a3-4384-8bff-01dd27308a4b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core\dllmain.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Globals.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Config.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\TrampolineHook.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\license.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\Hooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\OpenAL.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks\OpenGLHooks.cpp">
+      <Filter>hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\Aimbot.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\ESP.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\Viewmodel.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\AspectRatio.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\ChamsHand.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\PlayerChams.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\WallCheck.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\ChinaHat.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\TracersNew.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\NoFall.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\GUI.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="help\hde64.c">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="help\buffer.c">
+      <Filter>help</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\backends\imgui_impl_opengl2.cpp">
+      <Filter>imgui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\backends\imgui_impl_win32.cpp">
+      <Filter>imgui\backends</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="core\Globals.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Config.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\TrampolineHook.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\license.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="hooks\Hooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="hooks\OpenAL.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="hooks\OpenGLHooks.h">
+      <Filter>hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\Aimbot.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ESP.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\Viewmodel.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\AspectRatio.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ChamsHand.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\PlayerChams.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\WallCheck.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\ChinaHat.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\TracersNew.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\NoFall.h">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\GUI.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Timer.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="help\buffer.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="help\hde64.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="help\pstdint.h">
+      <Filter>help</Filter>
+    </ClInclude>
+    <ClInclude Include="help\table64.h">
+      <Filter>help</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
