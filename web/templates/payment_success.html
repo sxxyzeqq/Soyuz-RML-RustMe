@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Оплата успешна — {{ product_name }}{% endblock %}
+
+{% block content %}
+<style>
+    .success-container {
+        max-width: 500px;
+        margin: 80px auto;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    .success-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        animation: scaleIn 0.5s ease;
+    }
+
+    @keyframes scaleIn {
+        from { transform: scale(0); }
+        to { transform: scale(1); }
+    }
+
+    .success-container h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--success);
+        margin-bottom: 15px;
+    }
+
+    .success-container p {
+        color: var(--text-muted);
+        margin-bottom: 30px;
+    }
+</style>
+
+<div class="success-container">
+    <div class="success-icon">✅</div>
+    <h1>Оплата успешна!</h1>
+    <p>Ваша подписка активирована. Теперь вы можете скачать лоадер.</p>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Перейти в дашборд</a>
+</div>
+{% endblock %}

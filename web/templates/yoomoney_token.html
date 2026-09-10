@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+{% block title %}Получение токена ЮMoney{% endblock %}
+
+{% block content %}
+<style>
+    .token-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .token-container h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 20px;
+    }
+
+    .step {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 20px;
+    }
+
+    .step-number {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        background: var(--accent);
+        color: var(--bg);
+        border-radius: 50%;
+        text-align: center;
+        line-height: 30px;
+        font-weight: 700;
+        margin-right: 10px;
+    }
+
+    .step h3 {
+        display: inline;
+        color: var(--accent);
+        font-size: 1.1rem;
+    }
+
+    .step p {
+        color: var(--text-muted);
+        margin: 15px 0;
+        font-size: 0.9rem;
+    }
+
+    .code-box {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 15px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: var(--text-main);
+        word-break: break-all;
+        margin: 10px 0;
+    }
+
+    .btn-yoomoney {
+        display: inline-block;
+        padding: 12px 30px;
+        background: #8B5CF6;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .btn-yoomoney:hover {
+        background: #7C3AED;
+        transform: translateY(-2px);
+    }
+
+    .token-result {
+        background: rgba(74, 222, 128, 0.1);
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+        display: none;
+    }
+
+    .token-result h3 {
+        color: var(--success);
+        margin-bottom: 10px;
+    }
+
+    .token-value {
+        background: var(--bg);
+        padding: 10px;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 0.8rem;
+        word-break: break-all;
+        color: var(--success);
+    }
+
+    .copy-btn {
+        margin-top: 10px;
+        padding: 8px 20px;
+        background: var(--success);
+        color: var(--bg);
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .error-box {
+        background: rgba(248, 113, 113, 0.1);
+        border: 1px solid rgba(248, 113, 113, 0.3);
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+        display: none;
+    }
+
+    .error-box h3 {
+        color: var(--error);
+        margin-bottom: 10px;
+    }
+
+    .form-group {
+        margin: 15px 0;
+    }
+
+    .form-group label {
+        display: block;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px 15px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text-main);
+        font-family: monospace;
+        font-size: 0.85rem;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #555;
+    }
+</style>
+
+<div class="token-container">
+    <h1>🔑 Получение токена ЮMoney</h1>
+
+    <div class="step">
+        <span class="step-number">1</span>
+        <h3>Авторизация</h3>
+        <p>Нажмите кнопку ниже, чтобы перейти на ЮMoney и разрешить доступ к API.</p>
+        <a href="{{ auth_url }}" class="btn-yoomoney">Перейти на ЮMoney</a>
+    </div>
+
+    <div class="step">
+        <span class="step-number">2</span>
+        <h3>Введите код</h3>
+        <p>После разрешения доступа вас перекинет обратно на эту страницу. В адресной строке будет параметр <code>code=XXXXX</code>. Скопируйте его и вставьте ниже.</p>
+        
+        <div class="form-group">
+            <label>Код авторизации (code):</label>
+            <input type="text" id="authCode" placeholder="Вставьте код из URL...">
+        </div>
+        
+        <button class="btn btn-primary" onclick="exchangeCode()">Получить токен</button>
+    </div>
+
+    <div class="token-result" id="tokenResult">
+        <h3>✅ Токен получен!</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Скопируйте этот токен и вставьте в <code>.env</code> как <code>YOOMONEY_TOKEN</code>:</p>
+        <div class="token-value" id="tokenValue"></div>
+        <button class="copy-btn" onclick="copyToken()">Скопировать</button>
+    </div>
+
+    <div class="error-box" id="errorBox">
+        <h3>❌ Ошибка</h3>
+        <p id="errorMessage"></p>
+    </div>
+
+    <div class="step" style="margin-top: 30px;">
+        <h3 style="color: var(--text-muted); font-size: 1rem;">️ Информация</h3>
+        <p>
+            <b>Client ID:</b> {{ client_id[:20] }}...<br>
+            <b>Redirect URI:</b> {{ redirect_uri }}<br>
+            <b>Scope:</b> account-info operation-history
+        </p>
+    </div>
+</div>
+
+<script>
+    // Получаем code из URL если есть
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    const error = urlParams.get('error');
+    
+    if (code) {
+        document.getElementById('authCode').value = code;
+        exchangeCode();
+    }
+    
+    if (error) {
+        document.getElementById('errorBox').style.display = 'block';
+        document.getElementById('errorMessage').textContent = 'Ошибка авторизации: ' + error;
+    }
+
+    async function exchangeCode() {
+        const code = document.getElementById('authCode').value.trim();
+        if (!code) {
+            alert('Введите код авторизации');
+            return;
+        }
+
+        const resultDiv = document.getElementById('tokenResult');
+        const errorDiv = document.getElementById('errorBox');
+        
+        resultDiv.style.display = 'none';
+        errorDiv.style.display = 'none';
+
+        try {
+            const response = await fetch('/api/yoomoney/token', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: code })
+            });
+
+            const data = await response.json();
+
+            if (data.access_token) {
+                document.getElementById('tokenValue').textContent = data.access_token;
+                resultDiv.style.display = 'block';
+            } else {
+                document.getElementById('errorMessage').textContent = data.error || 'Неизвестная ошибка';
+                errorDiv.style.display = 'block';
+            }
+        } catch (e) {
+            document.getElementById('errorMessage').textContent = 'Ошибка соединения: ' + e.message;
+            errorDiv.style.display = 'block';
+        }
+    }
+
+    function copyToken() {
+        const token = document.getElementById('tokenValue').textContent;
+        navigator.clipboard.writeText(token).then(() => {
+            alert('Токен скопирован!');
+        });
+    }
+</script>
+{% endblock %}

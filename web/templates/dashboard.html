@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Дашборд — {{ product_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <div class="stat-value {% if account.is_paid %}status-active{% else %}status-inactive{% endif %}">
+                {% if account.is_paid %}Активна{% else %}Не активна{% endif %}
+            </div>
+            <div class="stat-label">Подписка</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ account.subscription_expires or '—' }}</div>
+            <div class="stat-label">Истекает</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">****{{ account.hwid[-8:] if account.hwid else '—' }}</div>
+            <div class="stat-label">HWID</div>
+        </div>
+    </div>
+
+    {% if account.is_paid %}
+    <div class="card">
+        <h2 class="card-title">📩 Скачать лоадер</h2>
+        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">
+            Введите желаемое имя файла и нажмите скачать. При первом запуске HWID будет привязан.
+        </p>
+        <form action="{{ url_for('download') }}" method="GET" style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <input type="text" name="name" placeholder="Имя файла (например: system32)" 
+                   style="flex: 1; min-width: 200px; padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); font-size: 0.95rem; font-family: 'Inter', sans-serif;"
+                   value="loader">
+            <button type="submit" class="btn btn-primary">Скачать .exe</button>
+        </form>
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center; border-color: rgba(248,113,113,0.3);">
+        <h2 class="card-title" style="color: var(--error);">Подписка не активна</h2>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">
+            Для доступа к лоадеру необходимо приобрести подписку.
+        </p>
+        <a href="{{ url_for('payment') }}" class="btn btn-primary">Купить подписку</a>
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <h2 class="card-title">ℹ️ Информация об аккаунте</h2>
+        <div style="display: grid; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border);">
+                <span style="color: var(--text-muted);">Логин</span>
+                <code style="color: var(--accent);">{{ account.login }}</code>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border);">
+                <span style="color: var(--text-muted);">Статус</span>
+                <span class="{% if account.is_paid %}status-active{% else %}status-inactive{% endif %}">
+                    {% if account.is_paid %}✅ Оплачен{% else %}❌ Не оплачен{% endif %}
+                </span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border);">
+                <span style="color: var(--text-muted);">Истекает</span>
+                <code style="color: var(--accent);">{{ account.subscription_expires or '—' }}</code>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; align-items: center;">
+                <span style="color: var(--text-muted);">HWID</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <code id="hwid-display" style="color: var(--accent); font-size: 0.8rem;">****{{ account.hwid[-8:] if account.hwid else 'Не привязан' }}</code>
+                    {% if account.hwid %}
+                    <button onclick="toggleHwid()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.8rem;">👁</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{{ url_for('profile') }}" class="btn btn-secondary">Настройки профиля</a>
+    </div>
+</div>
+
+<script>
+    const fullHwid = "{{ account.hwid or '' }}";
+    let visible = false;
+    
+    function toggleHwid() {
+        const el = document.getElementById('hwid-display');
+        visible = !visible;
+        el.textContent = visible ? fullHwid : '****' + fullHwid.slice(-8);
+    }
+</script>
+{% endblock %}
+EOF

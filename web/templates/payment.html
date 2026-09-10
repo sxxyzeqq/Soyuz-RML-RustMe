@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Оплата — {{ product_name }}{% endblock %}
+
+{% block content %}
+<style>
+    .payment-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .payment-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .payment-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 10px;
+    }
+
+    .payment-header p {
+        color: var(--text-muted);
+    }
+
+    .current-plan {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .current-plan-label {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .current-plan-value {
+        color: var(--accent);
+        font-weight: 600;
+    }
+
+    .tg-btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background: #2AABEE;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .tg-btn:hover {
+        background: #1E96D1;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(42, 171, 238, 0.3);
+    }
+</style>
+
+<div class="payment-container">
+    <div class="payment-header">
+        <h1>Выбор тарифа</h1>
+        <p>Выберите тариф и напишите в Telegram для оплаты</p>
+    </div>
+
+    <div class="current-plan">
+        <span class="current-plan-label">Текущий тариф:</span>
+        <span class="current-plan-value">
+            {% if account.is_paid %}
+                {{ account.subscription_expires }}
+            {% else %}
+                Не активен
+            {% endif %}
+        </span>
+    </div>
+
+    <div class="plans-grid">
+        {% for plan_id, plan in plans.items() %}
+        <div class="plan-card">
+            <div class="plan-emoji">{{ plan.emoji }}</div>
+            <div class="plan-title">{{ plan.title }}</div>
+            <div class="plan-price">{{ plan.price_display }}</div>
+            <a href="https://t.me/qwwqwqwqwqwsdad?text=Хочу%20купить%20{{ plan.title }}%20за%20{{ plan.price_display }}" class="tg-btn btn-block" target="_blank">Купить</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">← Назад</a>
+    </div>
+</div>
+{% endblock %}

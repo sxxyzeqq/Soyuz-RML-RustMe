@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Профиль — {{ product_name }}{% endblock %}
+
+{% block content %}
+<style>
+    .profile-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .profile-header h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent);
+    }
+</style>
+
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>Настройки профиля</h1>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">🔑 Сменить пароль</h2>
+        <form method="POST" action="{{ url_for('change_password') }}">
+            <div class="form-group">
+                <label>Новый пароль</label>
+                <input type="password" name="password" placeholder="Минимум 6 символов" required minlength="6">
+            </div>
+            <button type="submit" class="btn btn-primary">Изменить пароль</button>
+        </form>
+    </div>
+
+    <div class="card" style="border-color: rgba(248,113,113,0.3);">
+        <h2 class="card-title" style="color: var(--error);">🔄 Сброс HWID</h2>
+        <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem;">
+            Если вы сменили ПК или хотите перепривязать HWID. Стоимость: <b>99 ₽</b>.
+        </p>
+        <a href="{{ url_for('profile_reset_hwid_page') }}" class="btn btn-danger">Сбросить HWID</a>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">ℹ️ Данные аккаунта</h2>
+        <div style="display: grid; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border);">
+                <span style="color: var(--text-muted);">Логин</span>
+                <code style="color: var(--accent);">{{ account.login }}</code>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border);">
+                <span style="color: var(--text-muted);">Подписка</span>
+                <span class="{% if account.is_paid %}status-active{% else %}status-inactive{% endif %}">
+                    {% if account.is_paid %}✅ Активна{% else %} Не активна{% endif %}
+                </span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border);">
+                <span style="color: var(--text-muted);">Истекает</span>
+                <code style="color: var(--accent);">{{ account.subscription_expires or '—' }}</code>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                <span style="color: var(--text-muted);">HWID</span>
+                <code style="color: var(--accent); font-size: 0.8rem;">{{ account.hwid or 'Не привязан' }}</code>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">← Назад</a>
+    </div>
+</div>
+{% endblock %}

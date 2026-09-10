@@ -1,0 +1,109 @@
+cat > /var/www/web/templates/reset_hwid.html << 'EOF'
+{% extends "base.html" %}
+{% block title %}Сброс HWID — {{ product_name }}{% endblock %}
+
+{% block content %}
+<style>
+    .reset-container {
+        max-width: 500px;
+        margin: 60px auto;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    .reset-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+    }
+
+    .reset-container h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 15px;
+    }
+
+    .reset-container p {
+        color: var(--text-muted);
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+    }
+
+    .price-tag {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin: 30px 0;
+    }
+
+    .warning-box {
+        background: rgba(248, 113, 113, 0.1);
+        border: 1px solid rgba(248, 113, 113, 0.3);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 25px 0;
+        text-align: left;
+    }
+
+    .warning-box h3 {
+        color: var(--error);
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+
+    .warning-box ul {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        padding-left: 20px;
+    }
+
+    .warning-box li {
+        margin-bottom: 5px;
+    }
+
+    .pay-btn {
+        display: inline-block;
+        padding: 14px 50px;
+        background: var(--accent);
+        color: var(--bg);
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .pay-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(255,255,255,0.15);
+    }
+</style>
+
+<div class="reset-container">
+    <div class="reset-icon">🔄</div>
+    <h1>Сброс HWID</h1>
+    <p>Привязка HWID к другому устройству</p>
+
+    <div class="price-tag">99 ₽</div>
+
+    <div class="warning-box">
+        <h3>⚠️ Важно</h3>
+        <ul>
+            <li>После сброса старый лоадер перестанет работать</li>
+            <li>HWID будет привязан заново при следующем входе</li>
+            <li>Убедитесь, что вы на новом устройстве</li>
+        </ul>
+    </div>
+
+    <form action="{{ url_for('profile_reset_hwid_pay') }}" method="POST">
+        <button type="submit" class="pay-btn">Оплатить и сбросить</button>
+    </form>
+
+    <div style="margin-top: 25px;">
+        <a href="{{ url_for('profile') }}" class="btn btn-secondary">← Назад</a>
+    </div>
+</div>
+{% endblock %}
+EOF

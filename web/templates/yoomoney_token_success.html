@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}Токен получен{% endblock %}
+
+{% block content %}
+<style>
+    .success-container {
+        max-width: 600px;
+        margin: 60px auto;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    .success-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+    }
+
+    .success-container h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--success);
+        margin-bottom: 15px;
+    }
+
+    .success-container p {
+        color: var(--text-muted);
+        margin-bottom: 20px;
+    }
+
+    .token-box {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 25px;
+        margin: 30px 0;
+        text-align: left;
+    }
+
+    .token-box h3 {
+        color: var(--accent);
+        margin-bottom: 15px;
+        font-size: 1rem;
+    }
+
+    .token-value {
+        background: var(--bg);
+        padding: 15px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 0.8rem;
+        word-break: break-all;
+        color: var(--success);
+        margin-bottom: 15px;
+    }
+
+    .copy-btn {
+        padding: 10px 25px;
+        background: var(--success);
+        color: var(--bg);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+    }
+
+    .copy-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(74, 222, 128, 0.3);
+    }
+
+    .env-example {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 25px;
+        margin-top: 30px;
+        text-align: left;
+    }
+
+    .env-example h3 {
+        color: var(--accent);
+        margin-bottom: 15px;
+    }
+
+    .env-example code {
+        display: block;
+        background: var(--bg);
+        padding: 15px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+    }
+
+    .env-example code span {
+        color: var(--success);
+    }
+</style>
+
+<div class="success-container">
+    <div class="success-icon">✅</div>
+    <h1>Токен ЮMoney получен!</h1>
+    <p>Скопируйте токен ниже и вставьте его в файл <code>.env</code> на сервере.</p>
+
+    <div class="token-box">
+        <h3>Ваш токен:</h3>
+        <div class="token-value" id="tokenValue">{{ token }}</div>
+        <button class="copy-btn" onclick="copyToken()">Скопировать токен</button>
+    </div>
+
+    <div class="env-example">
+        <h3>Как использовать:</h3>
+        <code>
+            # В файле .env на сервере:<br>
+            YOOMONEY_TOKEN=<span>{{ token }}</span><br>
+            YOOMONEY_RECEIVER=41001XXXXXXXXX<br>
+            YOOMONEY_CLIENT_ID={{ client_id }}
+        </code>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Перейти в дашборд</a>
+    </div>
+</div>
+
+<script>
+    function copyToken() {
+        const token = document.getElementById('tokenValue').textContent.trim();
+        navigator.clipboard.writeText(token).then(() => {
+            alert('Токен скопирован в буфер обмена!');
+        }).catch(() => {
+            // Fallback для старых браузеров
+            const textarea = document.createElement('textarea');
+            textarea.value = token;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('Токен скопирован!');
+        });
+    }
+</script>
+{% endblock %}

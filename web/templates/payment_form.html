@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Оплата — {{ product_name }}{% endblock %}
+
+{% block content %}
+<style>
+    .payment-form-container {
+        max-width: 500px;
+        margin: 60px auto;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    .payment-form-container h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 10px;
+    }
+
+    .payment-info {
+        color: var(--text-muted);
+        margin-bottom: 30px;
+    }
+
+    .payment-amount {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 30px;
+    }
+
+    .yoomoney-btn {
+        display: inline-block;
+        padding: 14px 40px;
+        background: #8B5CF6;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .yoomoney-btn:hover {
+        background: #7C3AED;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+    }
+
+    .check-status {
+        margin-top: 20px;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+
+<div class="payment-form-container">
+    <h1>Оплата подписки</h1>
+    <p class="payment-info">{{ plan.title }} — {{ product_name }}</p>
+    <div class="payment-amount">{{ plan.price_display }}</div>
+
+    {{ form_html|safe }}
+
+    <button class="yoomoney-btn" onclick="document.getElementById('yoomoney-form').submit()">
+        Оплатить через ЮMoney
+    </button>
+
+    <div class="check-status">
+        <span class="spinner"></span>
+        Проверка оплаты...
+    </div>
+
+    <div style="margin-top: 30px;">
+        <a href="{{ url_for('payment') }}" class="btn btn-secondary">← Назад к тарифам</a>
+    </div>
+</div>
+
+<script>
+    const orderId = "{{ order_id }}";
+    
+    function checkPayment() {
+        fetch(`/payment/check/${orderId}`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'paid') {
+                    window.location.href = "{{ url_for('payment_success') }}";
+                }
+            })
+            .catch(() => {});
+    }
+    
+    // Проверяем каждые 3 секунды
+    setInterval(checkPayment, 3000);
+</script>
+{% endblock %}

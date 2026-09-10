@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+{% block title %}Админ-панель — {{ product_name }}{% endblock %}
+
+{% block content %}
+<style>
+    .admin-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .admin-header h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent);
+    }
+
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .stat-box {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .stat-box .value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent);
+    }
+
+    .stat-box .label {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        margin-top: 5px;
+    }
+
+    .admin-table-container {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .admin-table-header {
+        padding: 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .admin-table-header h2 {
+        font-size: 1.2rem;
+        color: var(--accent);
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .admin-table th, .admin-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.85rem;
+    }
+
+    .admin-table th {
+        color: var(--text-muted);
+        font-weight: 500;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        background: rgba(255,255,255,0.02);
+    }
+
+    .admin-table tr:hover {
+        background: rgba(255,255,255,0.02);
+    }
+
+    .admin-table code {
+        background: rgba(255,255,255,0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+
+    .btn-small {
+        padding: 4px 10px;
+        font-size: 0.75rem;
+        border-radius: 4px;
+    }
+
+    .grant-form {
+        display: inline-flex;
+        gap: 5px;
+        align-items: center;
+    }
+
+    .grant-form input {
+        width: 60px;
+        padding: 4px 8px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        color: var(--text-main);
+        font-size: 0.8rem;
+    }
+
+    .mass-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+        align-items: center;
+    }
+
+    .mass-actions form {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 14px;
+    }
+
+    .mass-actions form label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+    }
+
+    .mass-actions form input[type="number"],
+    .mass-actions form input[type="text"] {
+        width: 70px;
+        padding: 4px 8px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        color: var(--text-main);
+        font-size: 0.8rem;
+    }
+
+    .mass-actions form input[type="text"] {
+        width: 140px;
+    }
+
+    .btn-danger {
+        background: #dc3545;
+        color: white;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background: #c82333;
+    }
+
+    .btn-warning {
+        background: #e67e22;
+        color: white;
+        border: none;
+    }
+
+    .btn-warning:hover {
+        background: #d35400;
+    }
+
+    @media (max-width: 768px) {
+        .stats-row { grid-template-columns: 1fr; }
+        .admin-table { font-size: 0.75rem; }
+        .admin-table th, .admin-table td { padding: 8px 10px; }
+    }
+</style>
+
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>⚙️ Админ-панель</h1>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">← На сайт</a>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-box">
+            <div class="value">{{ stats.total }}</div>
+            <div class="label">Пользователей</div>
+        </div>
+        <div class="stat-box">
+            <div class="value">{{ stats.paid }}</div>
+            <div class="label">С подпиской</div>
+        </div>
+        <div class="stat-box">
+            <div class="value">{{ stats.revenue }} ₽</div>
+            <div class="label">Доход</div>
+        </div>
+    </div>
+
+    <div class="mass-actions">
+        <form method="POST" action="{{ url_for('admin_reset_hwid_all') }}" onsubmit="return confirm('Сбросить HWID всем пользователям?');">
+            <button type="submit" class="btn btn-warning btn-small">Сброс HWID всем</button>
+        </form>
+        <form method="POST" action="{{ url_for('admin_grant_all') }}">
+            <label>Выдать подписку всем:</label>
+            <input type="number" name="days" placeholder="Дни" min="1" required>
+            <button type="submit" class="btn btn-primary btn-small">Выдать всем</button>
+        </form>
+        <form method="POST" action="{{ url_for('admin_revoke_subscription_multi') }}">
+            <label>Снять подписку (ID):</label>
+            <input type="text" name="user_ids" placeholder="1, 2, 3" required>
+            <button type="submit" class="btn btn-danger btn-small">Снять</button>
+        </form>
+    </div>
+
+    <div class="admin-table-container">
+        <div class="admin-table-header">
+            <h2>👥 Пользователи</h2>
+        </div>
+        <div class="table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Логин</th>
+                        <th>Статус</th>
+                        <th>Истекает</th>
+                        <th>HWID</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td><code>{{ user.id }}</code></td>
+                        <td><code>{{ user.login }}</code></td>
+                        <td>
+                            {% if user.is_paid %}
+                            <span class="status-active">✅</span>
+                            {% else %}
+                            <span class="status-inactive"></span>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.subscription_expires or '—' }}</td>
+                        <td><code>{{ (user.hwid or '')[:20] }}{{ '...' if user.hwid and user.hwid|length > 20 }}</code></td>
+                        <td>
+                            <div class="grant-form">
+                                <form method="POST" action="{{ url_for('admin_grant') }}" style="display:inline;">
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <input type="number" name="days" placeholder="Дни" min="1" required>
+                                    <button type="submit" class="btn btn-primary btn-small">Выдать</button>
+                                </form>
+                                <form method="POST" action="{{ url_for('admin_reset_hwid') }}" style="display:inline;">
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <button type="submit" class="btn btn-secondary btn-small">Сброс HWID</button>
+                                </form>
+                                <form method="POST" action="{{ url_for('admin_revoke_subscription') }}" style="display:inline;" onsubmit="return confirm('Снять подписку у {{ user.login }}?');">
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <button type="submit" class="btn btn-danger btn-small">Снять подписку</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
